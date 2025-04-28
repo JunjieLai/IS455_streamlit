@@ -165,14 +165,16 @@ def admin_dashboard(conn, start_date, end_date):
                     side="right"
                 ),
                 hovermode="x unified",
-                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+                # 修改：增加图表边距，确保标签显示完整
+                margin=dict(l=20, r=50, t=30, b=40)
             )
             
             st.plotly_chart(fig, use_container_width=True)
 
-    # ==================================================
-    # Section 2: Product Performance Analysis
-    # ==================================================
+    # # ==================================================
+    # # Section 2: Product Performance Analysis
+    # # ==================================================
     st.subheader("Product Performance Analysis")
 
     # Get all product categories for filter
@@ -382,8 +384,20 @@ def admin_dashboard(conn, start_date, end_date):
                     text=product_metric_col
                 )
                 
-                fig_products.update_traces(texttemplate='%{text:.2s}', textposition='outside')
-                fig_products.update_layout(uniformtext_minsize=8, uniformtext_mode='hide')
+                # 修改：调整水平柱状图的宽度和显示
+                fig_products.update_traces(
+                    texttemplate='%{text:.2s}', 
+                    textposition='outside',
+                    width=0.7  # 调整水平柱状图的宽度
+                )
+                
+                # 修改：设置图表边距和间距
+                fig_products.update_layout(
+                    uniformtext_minsize=8, 
+                    uniformtext_mode='hide',
+                    bargap=0.2,  # 增加柱子之间的间距
+                    margin=dict(l=20, r=80, t=40, b=20)  # 增加右侧边距以容纳文本标签
+                )
                 
                 st.plotly_chart(fig_products, use_container_width=True)
         else:
@@ -436,6 +450,15 @@ def admin_dashboard(conn, start_date, end_date):
             color_continuous_scale='Viridis'
         )
         
+        # 修改：调整垂直柱状图的宽度和间距
+        fig.update_traces(width=0.6)  # 调整柱子宽度
+        
+        fig.update_layout(
+            bargap=0.2,  # 增加柱子之间的间距
+            bargroupgap=0.1,  # 增加柱组之间的间距
+            margin=dict(l=20, r=20, t=40, b=40)
+        )
+        
         st.plotly_chart(fig, use_container_width=True)
         
         # Data comparison section
@@ -486,7 +509,8 @@ def admin_dashboard(conn, start_date, end_date):
                     )
                 ),
                 title="Regional Performance Comparison (% of Maximum)",
-                showlegend=True
+                showlegend=True,
+                margin=dict(l=20, r=20, t=50, b=20)
             )
 
             st.plotly_chart(fig, use_container_width=True)
