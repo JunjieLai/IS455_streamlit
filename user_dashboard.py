@@ -73,11 +73,22 @@ def user_dashboard(conn, start_date, end_date):
             height=500
         )
         
+        # 修改：调整柱状图的宽度和间距
         fig.update_layout(
             xaxis={'categoryorder': 'total descending'},
-            showlegend=False
+            showlegend=False,
+            bargap=0.2,  # 增加柱子之间的间距
+            bargroupgap=0.1  # 增加柱组之间的间距
         )
         
+        # 修改：直接设置柱子宽度
+        fig.update_traces(width=0.6)  # 调整这个值来控制柱子宽度
+        
+        # 可选：设置固定宽度而不是使用容器宽度
+        # fig.update_layout(width=800)
+        # st.plotly_chart(fig)
+        
+        # 如果您仍想使用响应式布局，保留这行
         st.plotly_chart(fig, use_container_width=True)
         
         # Add a map visualization placeholder
@@ -113,6 +124,15 @@ def user_dashboard(conn, start_date, end_date):
             color=selected_metric,
             color_continuous_scale="Viridis",
             height=500
+        )
+        
+        # 修改：调整水平柱状图的宽度
+        fig.update_traces(width=0.7)  # 调整水平柱状图的宽度
+        
+        # 修改：增加图表边距，确保标签显示完整
+        fig.update_layout(
+            margin=dict(l=20, r=20, t=40, b=20),
+            bargap=0.2
         )
         
         st.plotly_chart(fig, use_container_width=True)
@@ -165,6 +185,9 @@ def user_dashboard(conn, start_date, end_date):
             labels={'UserType': 'User Type', 'SelectedMetric': comparison_metric}
         )
         
+        # 修改：调整比较柱状图的宽度
+        fig.update_traces(width=0.6)
+        
         # Format the text labels based on the metric
         if comparison_metric == "User Count":
             fig.update_traces(texttemplate='%{text:,.0f}', textposition='outside')
@@ -172,6 +195,12 @@ def user_dashboard(conn, start_date, end_date):
             fig.update_traces(texttemplate='$%{text:,.2f}', textposition='outside')
         else:
             fig.update_traces(texttemplate='%{text:.2f}', textposition='outside')
+        
+        # 修改：增加图表间距和边距
+        fig.update_layout(
+            bargap=0.3,
+            margin=dict(l=20, r=20, t=20, b=20)
+        )
         
         st.plotly_chart(fig, use_container_width=True)
     
@@ -224,7 +253,9 @@ def user_dashboard(conn, start_date, end_date):
                 xanchor="right",
                 x=1
             ),
-            height=500
+            height=500,
+            # 修改：增加图表边距，确保标签显示完整
+            margin=dict(l=20, r=20, t=40, b=40)
         )
         
         st.plotly_chart(fig, use_container_width=True)
@@ -285,7 +316,14 @@ def user_dashboard(conn, start_date, end_date):
             hole=0.4
         )
             
-        fig.update_traces(textposition='inside', textinfo='percent+label')       
+        fig.update_traces(textposition='inside', textinfo='percent+label')
+        
+        # 修改：确保饼图有足够的大小
+        fig.update_layout(
+            height=500,
+            margin=dict(l=20, r=20, t=20, b=20)
+        )
+        
         st.plotly_chart(fig, use_container_width=True)
 
         # Create metrics
